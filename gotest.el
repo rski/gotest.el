@@ -52,6 +52,12 @@ See https://getgb.io."
   :type 'string
   :group 'gotest)
 
+(defcustom go-test-nothing-placeholder "^NOTHING"
+  "The placeholder value sent to go test in order to skip unit tests when running benchmarks."
+  :type 'string
+  :group 'gotest)
+
+
 (defvar-local go-test-args nil
   "Arguments to pass to go test.
   This variable is buffer-local, set using .dir-locals.el for example.")
@@ -498,7 +504,7 @@ For example, if the current buffer is `foo.go', the buffer for
   (interactive)
   (let ((benchmark-name (go-test--get-current-benchmark)))
     (when benchmark-name
-      (go-test--go-test (s-concat "-run ^NOTHING -bench " benchmark-name "\\$")))))
+      (go-test--go-test (s-concat "-run " go-test-nothing-placeholder " -bench " benchmark-name "\\$")))))
 
 
 ;;;###autoload
@@ -506,14 +512,14 @@ For example, if the current buffer is `foo.go', the buffer for
   "Launch go benchmark on current file benchmarks."
   (interactive)
   (let ((benchmarks (go-test--get-current-file-benchmarks)))
-    (go-test--go-test (s-concat "-run ^NOTHING -bench '" benchmarks "'"))))
+    (go-test--go-test (s-concat "-run " go-test-nothing-placeholder " -bench '" benchmarks "'"))))
 
 
 ;;;###autoload
 (defun go-test-current-project-benchmarks ()
   "Launch go benchmark on current project."
   (interactive)
-  (go-test--go-test (s-concat "-run ^NOTHING -bench .")))
+  (go-test--go-test (s-concat "-run " go-test-nothing-placeholder " -bench .")))
 
 
 ;; Coverage
